@@ -1,47 +1,92 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
+# Temporary compiled files
+*.idb
+*.tlog
+*.log
+*.lastbuildstate
 
-# Folder config file
-Desktop.ini
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.pdb
+*.ilk
+*.iobj
+*.ipdb
+*.exp
+*.cso
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+# Precompiled Headers
+*.gch
+*.pch
 
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
 
-# Windows shortcuts
-*.lnk
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Visual Studio - solution files
+*.sdf
+*.suo
+*.opensdf
+*.opendb
+*.vcxproj.user
+*.VC.db
+
+# Git Extension
+*.orig
+
+# Maya
+*.mll
 
 # =========================
-# Operating System Files
-# =========================
-
 # OSX
-# =========================
-
 .DS_Store
 .AppleDouble
 .LSOverride
-
-# Thumbnails
+#### Thumbnails
 ._*
-
-# Files that might appear in the root of a volume
+#### Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd
 .Spotlight-V100
 .TemporaryItems
 .Trashes
 .VolumeIcon.icns
-
-# Directories potentially created on remote AFP share
+#### Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# =========================
+# Windows
+#### Windows image file caches
+Thumbs.db
+ehthumbs.db
+#### Folder config file
+Desktop.ini
+#### Recycle Bin used on file shares
+$RECYCLE.BIN/
+#### Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+#### Windows shortcuts
+*.lnk
