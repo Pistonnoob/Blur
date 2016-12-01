@@ -15,12 +15,6 @@ int main()
 	if (file.read(inBuffer, size))
 	{
 	}
-	for (int bufferIndex = 0; bufferIndex < size; bufferIndex++)
-	{
-		int charCode = (unsigned char)inBuffer[bufferIndex];
-		inBuffer[bufferIndex] = charCode;
-		outBuffer[bufferIndex] = charCode;
-	}
 	file.close();
 	const int WIDTH = 251;
 	const int HEIGHT = 256;
@@ -31,34 +25,17 @@ int main()
 	int charCode = 0;
 	for (int bufferIndex = 0; bufferIndex < size; bufferIndex++)
 	{
-		charCode = (unsigned char)inBuffer[bufferIndex];
-		int x = i % HEIGHT;
-		int y = i / HEIGHT;
-		i++;
-		image[x][y] = charCode;
-		/*if (x == 0 || x == HEIGHT - 1 || y == 0 || y == WIDTH - 1)
+		outBuffer[bufferIndex] = inBuffer[bufferIndex];
+		/*if (bufferIndex < WIDTH || bufferIndex > WIDTH * HEIGHT - WIDTH || bufferIndex % HEIGHT == 0 || bufferIndex % HEIGHT == 0)
 		{
-			output[x][y] = charCode;
+			outBuffer[bufferIndex] = inBuffer[bufferIndex];
 		}*/
-	}
-	//for (std::vector<char>::const_iterator iter = inBuffer.begin(); iter != inBuffer.end(); iter++)
-	//{
-	//	charCode = (unsigned char)(*iter);
-	//	int x = i % HEIGHT;
-	//	int y = i / HEIGHT;
-	//	image[x][y] = charCode;
-	//	/*if (x == 0 || x == WIDTH - 1 || y == 0 || y == HEIGHT - 1)
-	//	{
-	//		output[y][x] = charCode;
-	//	}*/
-	//	i++;
-	//}
-	for (int k = 0; k < HEIGHT; k++)
-	{
-		for (int l = 0; l < WIDTH; l++)
+		/*int x = bufferIndex % HEIGHT;
+		int y = bufferIndex / HEIGHT;
+		if (x == 0 || x == HEIGHT - 1 || y == 0 || y == WIDTH - 1)
 		{
-			output[k][l] = image[k][l];
-		}
+			outBuffer[bufferIndex] = inBuffer[bufferIndex];
+		}*/
 	}
 	cout << endl;
 	cout << "i = " << i << endl;
@@ -77,12 +54,12 @@ int main()
 					for (int widthOffset = -1; widthOffset < 2; widthOffset++)
 					{
 						//Blur
-						sum += inBuffer[(heightIndex + heightOffset) * WIDTH + (widthIndex + widthOffset)];
+						sum += (unsigned char)inBuffer[(heightIndex + heightOffset) * WIDTH + (widthIndex + widthOffset)];
 						//sum += image[heightIndex + heightOffset][widthIndex + widthOffset];
 					}
 				}
 				//Influence of pixel is equal to the influence of its neighbour. 1 for neighbour and 8 for pixel.
-				outBuffer[heightIndex * WIDTH + widthIndex] = (sum + inBuffer[heightIndex * WIDTH + widthIndex] * 7) / 16;
+				outBuffer[heightIndex * WIDTH + widthIndex] = (sum + (unsigned char)inBuffer[heightIndex * WIDTH + widthIndex] * 7) / 16;
 				//output[heightIndex][widthIndex] = (sum + image[heightIndex][widthIndex] * 7) / 16;
 			}
 			for (int k = 0; k < HEIGHT; k++)
@@ -107,16 +84,7 @@ int main()
 		char ch = (char)outBuffer[i];
 		outBuffer[i] = ch;
 	}
-	//int w = 0;
-	//for (int k = 0; k < WIDTH; k++)
-	//{
-	//	for (int l = 0; l < HEIGHT; l++)
-	//	{
-	//		outBuffer[w] = output[l][k];
-	//		//outBuffer[w] = output[l][k];
-	//		w++;
-	//	}
-	//}
+
 	outputFile.write(outBuffer, size);
 	outputFile.close();
 	delete[] inBuffer;
