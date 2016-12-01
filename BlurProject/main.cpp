@@ -10,10 +10,16 @@ int main()
 	ofstream outputFile("roller2.raw", std::ios::binary | std::ios::out);
 	std::streamsize size = file.tellg();
 	file.seekg(0, std::ios::beg);
-	char* buffer = new char[size];
-	//vector<char> buffer(size);
-	if (file.read(buffer, size))
+	char* inBuffer = new char[size];
+	char* outBuffer = new char[size];
+	if (file.read(inBuffer, size))
 	{
+	}
+	for (int bufferIndex = 0; bufferIndex < size; bufferIndex++)
+	{
+		int charCode = (unsigned char)inBuffer[bufferIndex];
+		inBuffer[bufferIndex] = charCode;
+		outBuffer[bufferIndex] = charCode;
 	}
 	file.close();
 	const int WIDTH = 251;
@@ -25,7 +31,7 @@ int main()
 	int charCode = 0;
 	for (int bufferIndex = 0; bufferIndex < size; bufferIndex++)
 	{
-		charCode = (unsigned char)buffer[bufferIndex];
+		charCode = (unsigned char)inBuffer[bufferIndex];
 		int x = i % HEIGHT;
 		int y = i / HEIGHT;
 		i++;
@@ -35,7 +41,7 @@ int main()
 			output[x][y] = charCode;
 		}*/
 	}
-	//for (std::vector<char>::const_iterator iter = buffer.begin(); iter != buffer.end(); iter++)
+	//for (std::vector<char>::const_iterator iter = inBuffer.begin(); iter != inBuffer.end(); iter++)
 	//{
 	//	charCode = (unsigned char)(*iter);
 	//	int x = i % HEIGHT;
@@ -71,17 +77,21 @@ int main()
 					for (int widthOffset = -1; widthOffset < 2; widthOffset++)
 					{
 						//Blur
-						sum += image[heightIndex + heightOffset][widthIndex + widthOffset];
+						sum += inBuffer[(heightIndex + heightOffset) * WIDTH + (widthIndex + widthOffset)];
+						//sum += image[heightIndex + heightOffset][widthIndex + widthOffset];
 					}
 				}
 				//Influence of pixel is equal to the influence of its neighbour. 1 for neighbour and 8 for pixel.
-				output[heightIndex][widthIndex] = (sum + image[heightIndex][widthIndex]*7)/16;
+				outBuffer[heightIndex * WIDTH + widthIndex] = (sum + inBuffer[heightIndex * WIDTH + widthIndex] * 7) / 16;
+				//output[heightIndex][widthIndex] = (sum + image[heightIndex][widthIndex] * 7) / 16;
 			}
 			for (int k = 0; k < HEIGHT; k++)
 			{
 				for (int l = 0; l < WIDTH; l++)
 				{
-					image[k][l] = output[k][l];
+					int arrayIndex = k * WIDTH + l;
+					inBuffer[arrayIndex] = outBuffer[arrayIndex];
+					//image[k][l] = output[k][l];
 				}
 			}
 			//Optimised. Tested and works.
@@ -92,17 +102,24 @@ int main()
 
 		}
 	}
-	int w = 0;
-	for (int k = 0; k < WIDTH; k++)
+	for (int i = 0; i < size; i++)
 	{
-		for (int l = 0; l < HEIGHT; l++)
-		{
-			buffer[w] = output[l][k];
-			//outBuffer[w] = output[l][k];
-			w++;
-		}
+		char ch = (char)outBuffer[i];
+		outBuffer[i] = ch;
 	}
-	outputFile.write(buffer, size);
+	//int w = 0;
+	//for (int k = 0; k < WIDTH; k++)
+	//{
+	//	for (int l = 0; l < HEIGHT; l++)
+	//	{
+	//		outBuffer[w] = output[l][k];
+	//		//outBuffer[w] = output[l][k];
+	//		w++;
+	//	}
+	//}
+	outputFile.write(outBuffer, size);
 	outputFile.close();
+	delete[] inBuffer;
+	delete[] outBuffer;
 	return 0;
 }
